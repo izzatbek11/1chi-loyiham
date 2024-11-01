@@ -1,56 +1,32 @@
-class Shaxs:
-    def __init__(self, ism, familiya):
-        self.ism = ism
-        self.familiya = familiya
+import pickle
 
-    def get_info(self):
-        return f"Ism: {self.ism}, Familiya: {self.familiya}"
+def is_birthday_in_pi(birthday: str, pi_digits: str) -> bool:
+    return birthday in pi_digits
 
-class Professor(Shaxs):
-    def __init__(self, ism, familiya, mutaxassislik):
-        super().__init__(ism, familiya)
-        self.mutaxassislik = mutaxassislik
+# π raqamlarini o'qish va saqlash
+with open('pi_million_digits.txt', 'r') as file:
+    pi_digits = file.read().replace('\n', '')
 
-    def get_info(self):
-        return f"Professor: {super().get_info()}, Mutaxassislik: {self.mutaxassislik}"
+with open('pi_digits.pkl', 'wb') as file:
+    pickle.dump(pi_digits, file)
 
-class Foydalanuvchi(Shaxs):
-    def __init__(self, ism, familiya, email):
-        super().__init__(ism, familiya)
-        self.email = email
+# Foydalanuvchidan ma'lumotlarni qabul qilish
+def append_data_to_file(filename: str):
+    with open(filename, 'a') as file:
+        while True:
+            user_input = input("Ma'lumot kiriting (to'xtatish uchun 'exit' yozing): ")
+            if user_input.lower() == 'exit':
+                break
+            file.write(user_input + '\n')
 
-    def get_info(self):
-        return f"Foydalanuvchi: {super().get_info()}, Email: {self.email}"
+append_data_to_file('user_data.txt')
 
-class Sotuvchi(Shaxs):
-    def __init__(self, ism, familiya, mahsulot):
-        super().__init__(ism, familiya)
-        self.mahsulot = mahsulot
+# Tug'ilgan kunni tekshirish
+with open('pi_digits.pkl', 'rb') as file:
+    pi_digits = pickle.load(file)
 
-    def get_info(self):
-        return f"Sotuvchi: {super().get_info()}, Mahsulot: {self.mahsulot}"
-
-class Mijoz(Shaxs):
-    def __init__(self, ism, familiya, telefon):
-        super().__init__(ism, familiya)
-        self.telefon = telefon
-
-    def get_info(self):
-        return f"Mijoz: {super().get_info()}, Telefon: {self.telefon}"
-
-class Admin(Foydalanuvchi):
-    def ban_user(self):
-        print("Foydalanuvchi bloklandi")
-
-professor = Professor("Ali", "Karimov", "Matematika")
-foydalanuvchi = Foydalanuvchi("Oyguloy", "Davlatova", "oyna@example.com")
-sotuvchi = Sotuvchi("Bobur", "Xolov", "Elektronika")
-mijoz = Mijoz("Jamila", "Saidova", "+9989283747474")
-admin = Admin("Jasur", "Rasulov", "jasur@gmail.com")
-
-print(professor.get_info())
-print(foydalanuvchi.get_info())
-print(sotuvchi.get_info())
-print(mijoz.get_info())
-admin.ban_user()
-print(admin.get_info())
+birthday = input("Tug'ilgan kuningizni YYYYMMDD formatida kiriting: ")
+if is_birthday_in_pi(birthday, pi_digits):
+    print("Sizning tug'ilgan kuningiz π soni tarkibida mavjud!")
+else:
+    print("Sizning tug'ilgan kuningiz π soni tarkibida mavjud emas.")
